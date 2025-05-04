@@ -79,7 +79,7 @@
 
 ## Data Cleaning
 
-Renaming some of the columns to standard SQL format.
+- Renaming some of the columns to standard SQL format.
 
 '''sql 
 Alter table consumer_complaint
