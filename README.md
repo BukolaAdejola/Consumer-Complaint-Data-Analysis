@@ -12,25 +12,31 @@
 - [Conclusion](Conclusion)
 - [Recommendation](Recommendation)
 
+---
+
   ## Introduction
   Consumer complaints provide valuable insights into customer dissatisfaction and potential areas for service improvement.
   Analyzing these complaints can help **Bank of America** identify trends, address recurring issues, and improve customer service efficiency.
 
+---
+
   ## Dataset Overview
-- This project is made up of 12 columns and 62516 rows
+- This dataset is made up of 12 columns and 62516 rows
 - Field	Description																									
-- Complaint ID	                The unique identification number for a complaint																						
-- Submitted via	                How the complaint was submitted to the CFPB																						
-- Date submitted	              The date the CFPB received the complaint																						
-- Date received	                The date the CFPB sent the complaint to the company																					
-- State	                        The state of the mailing address provided by the consumer																					
-- Product	                      The type of product the consumer identified in the complaint																					
-- Sub-product      	            The type of sub-product the consumer identified in the complaint (not all Products have Sub-products)																	
-- Issue	                        The issue the consumer identified in the complaint (possible values are dependent on Product)																	
-- Sub-issue	                    The sub-issue the consumer identified in the complaint (possible values are dependent on Product and Issue, and not all Issues have corresponding Sub-issues)											
+- Complaint ID	                	The unique identification number for a complaint																						
+- Submitted via	               		 How the complaint was submitted to the CFPB																						
+- Date submitted	        	The date the CFPB received the complaint																						
+- Date received	                	The date the CFPB sent the complaint to the company																					
+- State	                        	The state of the mailing address provided by the consumer																					
+- Product	                      	The type of product the consumer identified in the complaint																					
+- Sub-product      	            	The type of sub-product the consumer identified in the complaint (not all Products have Sub-products)																	
+- Issue	                        	The issue the consumer identified in the complaint (possible values are dependent on Product)																	
+- Sub-issue	                  	The sub-issue the consumer identified in the complaint (possible values are dependent on Product and Issue, and not all Issues have corresponding Sub-issues)											
 - Company public response	      The company's optional, public-facing response to a consumer's complaint. Companies can choose to select a response from a pre-set list of options that will be posted on the public database. For example, "Company believes complaint is the result of an isolated error."	
-- Company response to consumer	This is how the company responded. For example, "Closed with explanation."																			
-- Timely response?	            Whether the company gave a timely response (Yes/No)
+- Company response to consumer		This is how the company responded. For example, "Closed with explanation."																			
+- Timely response?	           	 Whether the company gave a timely response (Yes/No)
+
+---
 
   ## Project Objective
   Key Business Questions to Solve:
@@ -58,7 +64,6 @@
 
 ✅ How are most complaints resolved? (e.g., Closed with explanation, closed with monetary relief?)
 
-✅ Is there a correlation between the type of issue and the likelihood of receiving monetary relief?
 
 4. Untimely Responses & Their Impact
    
@@ -75,66 +80,91 @@
 ✅ Does submission method affect response time?
 
 ✅ How long does it take, on average, for the company to respond to a complaint?
-               				
+
+---               				
 
 ## Data Cleaning
 
 - Renaming some of the columns to standard SQL format.
 
-'''sql 
+```sql 
 Alter table consumer_complaint
 Rename column `Complaint ID` to Complaint_ID;
-'''
+```
 
-'''sql 
+```sql 
 Alter table consumer_complaint
 Rename column `Submitted via` to Submitted_Via;
-'''
+```
 
-'''sql 
+```sql 
 Alter table consumer_complaint
 Rename column `Date submitted` to Date_Submitted;
-'''
+```
+```sql
 Alter table consumer_complaint
 Rename column `Date received` to Date_Recieved ;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Sub-product` to Sub_Product;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Sub-issue` to Sub_Issue;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Company public response` to Company_Public_Response;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Company response to consumer` to Company_Respone_Consumer;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Timely response? ` to Timely_Response;
-'''
+```
+```sql
+Alter table consumer_complaint
 Rename column `Sub-issue` to Sub_Issue;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Company public response` to Company_Public_Response;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Company response to consumer` to Company_Respone_Consumer;
+```
+```sql
 Alter table consumer_complaint
 Rename column `Timely response? ` to Timely_Response;
+```
 
 - I also updated the Date_submitted to the standard SQL format.u
 
-'''sql
+```sql
 Set SQL_Safe_Updates =0;
-'''
-'''sql
+```
+```sql
 Update consumer_complaint
 Set Date_submitted = str_to_date(Date_submitted,"%m/%d/%YYYY");
-'''
-'''sql
+```
+```sql
 Update consumer_complaint
  Set Date_Recieved = str_to_date(Date_Recieved,"%m/%d/%YYYY");
-'''
+```
+
  - To check for duplicate
- - '''sql
+   
+```sql
  select Complaint_ID, Submitted_Via, Date_Submitted, State, Product, Sub_product, Count(*) from consumer_complaint
  group by Complaint_ID, Submitted_Via, DAte_Submitted, State, Product, Sub_product
   having count (*) >1;
-'''
+```
+
+---
 
 ## Data Insights
 
@@ -181,16 +211,16 @@ Checking or savings account received the most complaint with a count of 24814
 
 Insights:
 
-Products						Issues					Count
-1.	Checking or savings account	Managing an account	15109
-2.	Credit card or prepaid card	Problem with a purchase shown on your statement	4415
-3.	Credit reporting, credit repair services, or other personal consumer reports	Incorrect information on your report	4145
-4.	Debt collection	Attempts to collect debt not owed	1351
-5.	Money transfer, virtual currency, or money service	Fraud or scam	1951
-6.	Mortgage	Trouble during payment process	2827
-7.	Payday loan, title loan, or personal loan	Getting a line of credit	71
-8.	Student loan	Dealing with your lender or servicer	20
-9.	Vehicle loan or lease	Managing the loan or lease	222
+Products							Issues						Count
+1.	Checking or savings account			Managing an account					15109
+2.	Credit card or prepaid card			Problem with a purchase shown on your statement		4415
+3.	Credit reporting, credit repair services	Incorrect information on your report			4145
+5.	Debt collection					Attempts to collect debt not owed			1351
+6.	Money transfer, virtual currency, or money service	Fraud or scam					1951
+7.	Mortgage					Trouble during payment process				2827
+8.	Payday loan, title loan, or personal loan	Getting a line of credit				71
+9.	Student loan					Dealing with your lender or servicer			20
+10.	Vehicle loan or lease				Managing the loan or lease				222
 
 ✅ Are certain sub-products more prone to complaints?
 
@@ -231,7 +261,15 @@ and then Wednesday having 420. Friday has a count of 386 and Monday has 365.
 
 ✅ Do specific complaint types or products tend to have delayed responses?
 
+Insights: Products such as Vehicle loan or lease have a delayed response with a count of 33,
+next is Mortgage products having a delayed response with a count of 16, payday loan, 
+title loan or personal loan has the lowest delayed response with a count of 10.
+
+
 ✅ Are certain states more likely to receive untimely responses?
+
+Insights: After limiting my result to 5, Indonesia has untimely response count of 3, 
+Hawaii has a count of 2, Vermont has 2, Maine has a count of 1 and lastly North Dakota has 1.
 
 5. Submission Channel & Processing Time
    
@@ -251,6 +289,7 @@ submission via Phone and Postal mail has a response time of 2days while submissi
 
 On average, it takes the company 2days to respond to a complaint.
 
+---
 ## Conclusion
 
 The consumer complaint analysis across 62,516 customers and 76 issue categories reveals clear patterns in complaint behavior, product performance, and company responsiveness. Complaints show strong seasonality, with peaks in Q2 and Q3, and a volatile trend in volume over the years 2017–2023. California, Florida, and Texas are the top states with the highest complaint counts, indicating possible regional service or communication challenges.
@@ -259,6 +298,8 @@ Checking or savings accounts generate the most dissatisfaction, particularly aro
 
 The company demonstrates commendable responsiveness, with 93.77% of cases handled in a timely manner, and most complaints being "closed with explanation". However, untimely responses are still present and seem more common on weekends, and potentially vary by state, issue, or product—requiring further investigation.
 Submission method plays a significant role in processing time, with web submissions being the fastest and referrals taking the longest to resolve.
+
+---
 
 ## Recommendation
 
